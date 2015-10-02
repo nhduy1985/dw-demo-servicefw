@@ -1,0 +1,42 @@
+/**
+* Demandware Script File
+* To define input and output parameters, create entries of the form:
+*
+* @<paramUsageType> <paramName> : <paramDataType> [<paramComment>]
+*
+* where
+*   <paramUsageType> can be either 'input' or 'output'
+*   <paramName> can be any valid parameter name
+*   <paramDataType> identifies the type of the parameter
+*   <paramComment> is an optional comment
+*
+* For example:
+*
+* @input Email : String
+* @output Subscribers : Object
+*
+*/
+importPackage( dw.svc );
+importPackage( dw.net );
+importPackage( dw.io );
+
+
+function execute( args : PipelineDictionary ) : Number
+{
+
+	var service:Service; 
+    var result:Result;
+    var requestBody = {
+    	'email':args.Email, 
+    	'enable': 1
+    }; 
+         	
+    service = ServiceRegistry.get("rest.demo.firebase");
+    service.URL += "subscriptions.json";
+    service.setRequestMethod("POST");
+    result = service.call(requestBody);
+    var test = service.getRequestData();
+    args.Subscribers = JSON.parse(result.object.text);
+
+   return PIPELET_NEXT;
+}

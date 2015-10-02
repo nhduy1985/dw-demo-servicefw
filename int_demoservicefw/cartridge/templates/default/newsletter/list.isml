@@ -1,0 +1,2 @@
+<!--- TEMPLATENAME: newsletters.isml --->
+${JSON.stringify(pdict.Subscribers)}

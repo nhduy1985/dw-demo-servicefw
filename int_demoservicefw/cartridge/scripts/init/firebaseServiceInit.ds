@@ -1,0 +1,31 @@
+importPackage( dw.svc );
+importPackage( dw.net );
+importPackage( dw.io );
+
+ServiceRegistry.configure("rest.demo.firebase", {
+     createRequest: function(svc: HTTPService, params) {
+        //firebase auth with token as service's password
+    	svc.URL += '?auth=' + svc.getConfiguration().getCredential().getPassword();     	 
+    	if (svc.getRequestMethod() == "POST") {
+    		svc.addHeader("Content-Type", "text/json");
+			return JSON.stringify(params);
+    	}
+    	else {
+    		return null;
+    	}
+    },
+    parseResponse : function(svc: HTTPService, response) {
+        return response;
+    },
+    mockCall : function(svc: HTTPService, params) {
+    	var response = [
+        	{"email":"demo.tran@bluecomgroup.com","enable":1},
+        	{"email":"mock.tran@bluecomgroup.com","enable":0}
+        ];
+    	return {
+			statusCode: 200,
+			statusMessage: "Success",
+			text: JSON.stringify(response)
+		};
+    }
+});

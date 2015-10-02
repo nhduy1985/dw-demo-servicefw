@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?demandware-pipeline version="2.0"?>
+
+<pipeline type="view">
+  <branch basename="Start">
+    <segment>
+      <node>
+        <start-node name="Start" secure="false"/>
+        <node-display x="1" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="false"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="GetNewsletters.ds"/>
+          <key-binding alias="null" key="ScriptLog"/>
+          <key-binding alias="Subscribers" key="Subscribers"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in1" target-path="./+1">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+              <bend-point relative-to="target" x="2" y="0"/>
+            </transition-display>
+          </transition>
+        </branch>
+      </node>
+      <transition target-connector="in1" target-path="./+1"/>
+    </segment>
+    <segment>
+      <node>
+        <join-node/>
+        <node-display x="0" y="1"/>
+      </node>
+      <transition target-connector="in1" target-path="./+1"/>
+    </segment>
+    <segment>
+      <node>
+        <join-node/>
+        <node-display x="1" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <interaction-node transaction-required="false">
+          <template buffered="true" dynamic="false" name="newsletter/list"/>
+        </interaction-node>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="Add">
+    <segment>
+      <node>
+        <start-node name="Add" secure="false"/>
+        <node-display x="3" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="false"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="AddNewsletters.ds"/>
+          <key-binding alias="null" key="ScriptLog"/>
+          <key-binding alias="CurrentHttpParameterMap.email.stringValue" key="Email"/>
+          <key-binding alias="Subscribers" key="Subscribers"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in1" target-path="./+1">
+            <transition-display>
+              <bend-point relative-to="source" x="1" y="0"/>
+              <bend-point relative-to="target" x="1" y="0"/>
+            </transition-display>
+          </transition>
+        </branch>
+      </node>
+      <transition target-connector="in1" target-path="./+1"/>
+    </segment>
+    <segment>
+      <node>
+        <join-node/>
+        <node-display x="0" y="1"/>
+      </node>
+      <transition target-connector="in1" target-path="/Start.3">
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="2"/>
+        </transition-display>
+      </transition>
+    </segment>
+  </branch>
+</pipeline>
