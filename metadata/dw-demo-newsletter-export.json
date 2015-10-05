@@ -1,0 +1,15 @@
+{
+  "subscriptions" : [ {
+    "email" : "duy.tran@bluecomgroup.com",
+    "enable" : 1
+  }, {
+    "email" : "duy1.tran@bluecomgroup.com",
+    "enable" : 0
+  }, {
+    "email" : "duy2.tran@bluecomgroup.com",
+    "enable" : 1
+  }, {
+    "email" : "duy3.tran@bluecomgroup.com",
+    "enable" : 0
+  } ]
+}
